@@ -15,7 +15,7 @@ double avgTemp (int colNum, double chart[385][8])
 }
 
 /*Methods for Question 2*/
-int warmest(double lakeT [6])
+int warmestLake(double lakeT [6])
 {	
 	int i =0, temp = (int)(100*lakeT[0]), rCol = 0;
 	
@@ -31,7 +31,7 @@ int warmest(double lakeT [6])
 	return (rCol);
 }
 
-int coldest(double lakeT [6])
+int coldestLake(double lakeT [6])
 {	
 	int i =0, temp = (int)(100*lakeT[0]), rCol = 0;
 	
@@ -47,7 +47,6 @@ int coldest(double lakeT [6])
 	return (rCol);
 }
 
-/*Methods for Question 3*/
 void aboveAverage (double lAverage[], double AverageT)
 {
 	int i;
@@ -61,7 +60,39 @@ void aboveAverage (double lAverage[], double AverageT)
 		printf("Below\t");
 	}
 }
+/*Question 3 Methods*/
+int warmestDay (double lG[365][8], int colN)
+{
+	int day, i;
+	double hTemp = lG[0][colN];
+	
+	for (i = 1 ; i< 365; i++) 
+	{
+		if ((int)(100*lG[i][colN])>(int)(100*hTemp))
+		{
+			hTemp = lG[i][colN];
+			day = i;
+		} 
+	}
+	return day;
+}
 
+
+int coldestDay (double lG[365][8], int colN)
+{
+	int day, i;
+	double lTemp = lG[0][colN];
+	
+	for (i = 1 ; i< 365; i++) 
+	{
+		if ((int)(100*lG[i][colN])<(int)(100*lTemp))
+		{
+			lTemp = lG[i][colN];
+			day = i;
+		} 
+	}
+	return day;
+}
 /*Main Method*/
 int main(void)
 {
@@ -70,7 +101,7 @@ int main(void)
 	double lakeA [6];
 	double temp, totalA = 0;
 	char str[][10] = {"Year","Date","Superior","Michigan","Huron","Erie","Ontario","St Clair"};
-	int wDay[6]
+	int wDay[6], cDay[6];
 	int row, col, warmCol, coldCol;
 	
 	in = fopen("file.txt","r");
@@ -85,7 +116,7 @@ int main(void)
 	}	 	 
 
 	printf("\tYear\tDate\tSup\tMich\tHuron\tErie\tOnt\tSt Clar\tTotal\n");	  
-/*Redo this line with a for loop*/	  printf("\t%.lf\t%.lf\t%.2lf\t%.2lf\t%.2lf\t%.2lf\t%.2lf\t%.2lf\t\n",lakeGraph[364][0],lakeGraph[364][1],lakeGraph[364][2],lakeGraph[364][3],lakeGraph[364][4],lakeGraph[364][5],lakeGraph[364][6],lakeGraph[364][7]);
+	printf("\t%.lf\t%.lf\t%.2lf\t%.2lf\t%.2lf\t%.2lf\t%.2lf\t%.2lf\t\n",lakeGraph[364][0],lakeGraph[364][1],lakeGraph[364][2],lakeGraph[364][3],lakeGraph[364][4],lakeGraph[364][5],lakeGraph[364][6],lakeGraph[364][7]);
 
 	printf("1)\t\t\t");
 	
@@ -103,13 +134,19 @@ int main(void)
 	
 	/*Question 2 */
 
-	warmCol = warmest(lakeA);
-	coldCol = coldest(lakeA);
+	warmCol = warmestLake(lakeA);
+	coldCol = coldestLake(lakeA);
 	printf("2a)\tWarmest = %s \t\tColdest = %s\n",str[warmCol+2], str[coldCol+2]);
 	aboveAverage(lakeA, totalA);
-
+	
+	/*Question 3*/
+	printf("\n 3)");
+	for (col = 0 ; col < 6 ; col++)
+	{
+		wDay[col] = warmestDay(lakeGraph, col);
+		cDay[col] = coldestDay(lakeGraph, col);
+		printf("\t%s:\tH:%d\tL:%d",str[col+2],wDay[col],cDay[col]);
+	}	
 	return (0);
 }
-
-
 
